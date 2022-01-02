@@ -1,12 +1,13 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.0-SNAPSHOT'
+	id 'org.springframework.boot' version '2.6.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+	id 'java-library'
+	id 'maven-publish'
 }
 
 group = 'jp.prototype'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = "17"
 
 configurations {
 	compileOnly {
@@ -16,12 +17,10 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
+	mavenLocal()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -29,4 +28,23 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+bootJar {
+  enabled = false
+}
+
+// Maven Publish Plugin
+// https://docs.gradle.org/current/userguide/publishing_maven.html#header
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
 }
