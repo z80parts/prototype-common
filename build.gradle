@@ -21,6 +21,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,14 +38,23 @@ bootJar {
 // Maven Publish Plugin
 // https://docs.gradle.org/current/userguide/publishing_maven.html#header
 java {
-	withJavadocJar()
+//	withJavadocJar()
 	withSourcesJar()
 }
 
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
 }
